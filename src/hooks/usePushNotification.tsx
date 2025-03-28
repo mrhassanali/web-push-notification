@@ -15,6 +15,11 @@ const usePushNotification = () => {
    */
   const requestPermission = async (): Promise<NotificationPermission> => {
     try {
+      // also check with = "Notification" in ServiceWorkerRegistration.prototype
+      // also check with = "Notification" in window
+      // also check with = "Notification" in globalThis
+      // also check with  = "PushManager" in window
+
       if ("Notification" in window) {
         const permission = await Notification.requestPermission();
         return permission;
@@ -35,6 +40,11 @@ const usePushNotification = () => {
 
   //  if pushManager in  window then subscribe to push notification
   const subscribe = async () => {
+    const status = await requestPermission();
+    if (status !== "granted") {
+      toast.error("Permission denied for push notification. Please allow the permission to subscribe to push notification");
+      return;
+    }
 
     const subscribeOptions: PushSubscriptionOptionsInit = {
       userVisibleOnly: true,
