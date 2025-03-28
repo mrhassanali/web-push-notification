@@ -1,5 +1,7 @@
 "use client";
 
+import { toast } from "sonner";
+
 /**
  * usePushNotification  : Hook to handle push notification
  */
@@ -31,10 +33,49 @@ const usePushNotification = () => {
     }
   };
 
-//  if pushManager in  window then subscribe to push notification
+  //  if pushManager in  window then subscribe to push notification
+  const subscribe = async () => {
+
+    const subscribeOptions: PushSubscriptionOptionsInit = {
+      userVisibleOnly: true,
+      applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+    };
+
+    if ("serviceWorker" in navigator && "PushManager" in window) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.pushManager
+          .subscribe(subscribeOptions)
+          .then((subscription) => {
+            console.log("Subscribed to push notification", subscription);
+            toast(
+              <>
+                <h1 className="text-md font-bold">Subscribed to push notification
+                </h1>
+                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4 overflow-x-scroll">
+                  <code className="text-white">
+                    {JSON.stringify(subscription, null, 3)}
+                  </code>
+                </pre>
+              </>
+            );
+          })
+          .catch((error) => {
+            console.error(
+              "An error occurred while subscribing to push notification",
+              error
+            );
+          });
+      });
+    } else {
+      console.error(
+        "Service worker or Push manager not supported in this browser"
+      );
+    }
+  };
 
   return {
     requestPermission,
+    subscribe,
   };
 };
 
