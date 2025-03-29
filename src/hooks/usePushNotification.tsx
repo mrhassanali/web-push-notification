@@ -78,15 +78,20 @@ const usePushNotification = () => {
             );
           })
           .catch((error) => {
-            console.error(
-              "An error occurred while subscribing to push notification",
-              error
-            );
+            if (error instanceof Error) {
+              toast.error(
+                `Error subscribing to push notification: ${error.message}`
+              );
+            } else {
+              toast.error(
+                "Error subscribing to push notification: Unknown error"
+              );
+            }
           });
       });
     } else {
-      console.error(
-        "Service worker or Push manager not supported in this browser"
+      toast.error(
+        "Push notification is not supported in this browser. Please use a different browser."
       );
     }
   };
