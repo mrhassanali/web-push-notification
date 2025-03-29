@@ -1,5 +1,6 @@
 "use client";
 import usePushNotification from "@/hooks/usePushNotification";
+import { BROADCAST_NOTIFICATION_API } from "@/lib/constants/apiEndpoint";
 import Image from "next/image";
 import React from "react";
 
@@ -18,13 +19,13 @@ export default function Home() {
       navigator.serviceWorker
         .register("/sw.js")
         .then(() => console.log("Service Worker Registered"))
-        .catch((error) => console.error("Service Worker Registration Failed", error));
+        .catch((error) =>
+          console.error("Service Worker Registration Failed", error)
+        );
     }
   }, []);
-  
 
   // Adding Subscribe Notification button
-
   const subscribeNotification = () => {
     notification.subscribe();
   };
@@ -41,15 +42,44 @@ export default function Home() {
           priority
         />
         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
           <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
+            Get Permission for Push Notification
+          </li>
+
+          <li className="tracking-[-.01em]">
+            Setup Service Worker{" "}
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+              sw.js
+            </code>{" "}
+            for receiving push notification
+          </li>
+
+          <li className="tracking-[-.01em]">
+            Generate VAPID keys using{" "}
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+              npx web-push generate-vapid-keys
+            </code>
+          </li>
+
+          <li className="tracking-[-.01em]">
+            Subscribe to Push Notification using{" "}
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+              web-push
+            </code>
+          </li>
+
+          <li className="tracking-[-.01em]">
+            Send Push Notification using{" "}
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+              web-push
+            </code>
+          </li>
+
+          <li className="tracking-[-.01em]">
+            Send Broadcast Notification using{" "}
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+              web-push
+            </code>
           </li>
         </ol>
 
@@ -68,20 +98,32 @@ export default function Home() {
             />
             Subscribe Notification
           </button>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
+          <button
+            className="cursor-pointer rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:max-w-fit"
             rel="noopener noreferrer"
+            onClick={() => {
+              fetch(BROADCAST_NOTIFICATION_API, {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              })
+                .then((data) => {
+                  console.log("Success:", data);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }}
           >
-            Read our docs
-          </a>
+            Send Broadcast Notification
+          </button>
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          href="https://developer.mozilla.org/en-US/docs/Web/API/Push_API"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -92,11 +134,11 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Learn
+          MDN Web Docs
         </a>
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          href="https://web.dev/articles/push-notifications-overview"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -107,7 +149,7 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Examples
+          Push notifications (web.dev)
         </a>
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
