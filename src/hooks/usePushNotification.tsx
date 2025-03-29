@@ -1,5 +1,7 @@
 "use client";
 
+import { WEB_PUSH_NOTIFICATION_API } from "@/lib/constants/apiEndpoint";
+import { arrayBufferToBase64 } from "@/lib/utils/helper";
 import { toast } from "sonner";
 
 /**
@@ -42,7 +44,9 @@ const usePushNotification = () => {
   const subscribe = async () => {
     const status = await requestPermission();
     if (status !== "granted") {
-      toast.error("Permission denied for push notification. Please allow the permission to subscribe to push notification");
+      toast.error(
+        "Permission denied for push notification. Please allow the permission to subscribe to push notification"
+      );
       return;
     }
 
@@ -57,9 +61,13 @@ const usePushNotification = () => {
           .subscribe(subscribeOptions)
           .then((subscription) => {
             console.log("Subscribed to push notification", subscription);
+            // Send the subscription to the server
+            updatePushStatus(subscription);
+
             toast(
               <>
-                <h1 className="text-md font-bold">Subscribed to push notification
+                <h1 className="text-md font-bold">
+                  Subscribed to push notification
                 </h1>
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4 overflow-x-scroll">
                   <code className="text-white">
@@ -82,6 +90,45 @@ const usePushNotification = () => {
       );
     }
   };
+
+  function updatePushStatus(subscription: PushSubscription) {
+    if (subscription) {
+      var endpoint = subscription.endpoint;
+      var key = "";
+      var auth = "";
+      if ("getKey" in subscription) {
+        // Key to encode payload data later
+        key = arrayBufferToBase64(subscription.getKey("p256dh") as ArrayBuffer);
+        auth = arrayBufferToBase64(subscription.getKey("auth") as ArrayBuffer);
+      } else {
+        // It's a very old browser, it doesn't support payload
+        // Are we managing this situation?
+      }
+
+      console.log(subscription);
+      fetch(WEB_PUSH_NOTIFICATION_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          endpoint: endpoint,
+          keys: {
+            auth: auth,
+            p256dh: key,
+          },
+        }),
+      })
+        .then(function () {
+          console.log("The push subscription was saved on the server");
+        })
+        .catch(function () {
+          console.log("The push subscription wasn't saved on the server");
+        });
+    } else {
+      console.log("Subscription data is null");
+    }
+  }
 
   return {
     requestPermission,
