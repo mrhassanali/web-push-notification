@@ -52,7 +52,7 @@ self.addEventListener("push", function(event) {
 
 
 function showNotification(text) {
-    self.registration.showNotification("Frontend Masters", {
+    self.registration.showNotification("Hassan Ali", {
         body: text,
         // dir: "auto|rtl|ltr",
         actions: [
