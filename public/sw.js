@@ -59,16 +59,16 @@ function showNotification(text) {
           {
             action: 'action-yes',
             title: 'Yes',
-            icon: 'http://localhost:4000/images/action_yes.png' 
+            icon: 'http://localhost:3000/images/action_yes.png' 
           },
           {
             action: 'action-no',
             title: 'No',
-            icon: 'http://localhost:4000/images/action_no.png' 
+            icon: 'http://localhost:3000/images/action_no.png' 
           }
         ],
-        icon: "http://localhost:4000/images/icon.png",
-        badge: "http://localhost:4000/images/badge.png",
+        icon: "https://hassanali.pk/images/profile/profile.png",
+        badge: "http://localhost:3000/images/badge.png",
         // image: "https://...",      
         vibrate: [100,50,100,50,100],
         // sound: "https://",        

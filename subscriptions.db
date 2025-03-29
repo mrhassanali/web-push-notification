@@ -1,0 +1,2 @@
+{"type":"webpush","endpoint":"https://fcm.googleapis.com/fcm/send/fJjkPFyACwk:APA91bGiq2tOGDNMGdj2a3xTftRMDB9SPnJzHpQ4jb-iA_3fQpwqeswlhEHVNluCSBh8Y0zXE65yru2Ex-ZKiXbgYzoaPwdsoYYyQE0hj0bkMx7orNXwXOAhTIVCGyXCtpD2RF-Jx4Ln","keys":{"auth":"NKfzOZm/P+YuQcr09HbeKg==","p256dh":"BPNuK29V1T7zjQalUMX3WaLHZcG4Jghnq0MjAACIjyNGahX+NXPY83T0gdqvsYdB4ZQFV1c6c0DC4xbBb+2CDvw="},"createdAt":{"$$date":1743213580022},"updatedAt":{"$$date":1743213580022},"_id":"51rg13qH1lSqADHT"}
+{"$$indexCreated":{"fieldName":"endpoint","unique":true,"sparse":false}}

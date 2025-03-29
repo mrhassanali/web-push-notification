@@ -3,6 +3,7 @@ import usePushNotification from "@/hooks/usePushNotification";
 import { BROADCAST_NOTIFICATION_API } from "@/lib/constants/apiEndpoint";
 import Image from "next/image";
 import React from "react";
+import { toast } from "sonner";
 
 export default function Home() {
   const notification = usePushNotification();
@@ -28,6 +29,30 @@ export default function Home() {
   // Adding Subscribe Notification button
   const subscribeNotification = () => {
     notification.subscribe();
+  };
+
+  const sendPushNotificationToUser = async () => {
+    try {
+      const response = await fetch(BROADCAST_NOTIFICATION_API, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        toast.success("Push notification sent successfully");
+      } else {
+        toast.error("Failed to send push notification");
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("An error occurred while sending push notification");
+      }
+    }
   };
 
   return (
@@ -101,20 +126,7 @@ export default function Home() {
           <button
             className="cursor-pointer rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:max-w-fit"
             rel="noopener noreferrer"
-            onClick={() => {
-              fetch(BROADCAST_NOTIFICATION_API, {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              })
-                .then((data) => {
-                  console.log("Success:", data);
-                })
-                .catch((error) => {
-                  console.error("Error:", error);
-                });
-            }}
+            onClick={sendPushNotificationToUser}
           >
             Send Broadcast Notification
           </button>
