@@ -1,31 +1,130 @@
-# web-push-notification
+<div align="center">
 
-A custom implementation of Web Push Notifications using the Push API, Notification API, and Web Push Protocol. This project focuses on building a self-hosted push notification service without relying on Firebase or third-party providers.
+# 🔔 Web Push Notifications
 
-## Packages Used
+A self-hosted push notification service built with modern web standards
 
-- [web-push](https://www.npmjs.com/package/web-push)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Made with Next.js](https://img.shields.io/badge/Made%20with-Next.js-000000?logo=Next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-## Generate VAPID Keys
+<p align="center">
+  <img src="docs/notification-demo.gif" alt="Demo" width="600px" />
+</p>
 
-- Run the following command to generate VAPID keys
+</div>
 
+## ✨ Features
+
+- 🚀 Built with Next.js and TypeScript
+- 🔒 No third-party dependencies (Firebase-free)
+- 💪 Uses Web Push Protocol
+- 🌐 Cross-browser support
+- 🎯 Targeted notifications
+- ⚡ Real-time delivery
+
+## 🚀 Quick Start
+
+1. Clone the repository:
+```bash
+git clone https://github.com/mrhassanali/web-push-notification.git
+cd web-push-notification
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Generate VAPID keys:
 ```bash
 npx web-push generate-vapid-keys
 ```
-- Copy the generated keys and update the public and private keys.
-- **Public Key**: is used in the frontend to subscribe to push notifications.
-- **Private Key**: is used in the backend to send push notifications.
-- Because when we are sending messages to a user later,we will sign the package with our private key.
-- The **push server** will store our public key to add to,
 
+4. Create `.env.local` file:
+```env
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=your_public_key_here
+VAPID_PRIVATE_KEY=your_private_key_here
+```
 
-## Steps For Notification
+5. Start the development server:
+```bash
+npm run dev
+```
 
-1. **Subscribe to Push Notifications**: When the user visits the website, they will be prompted to subscribe to push notifications. The frontend will generate a subscription object and send it to the backend. 
-  - `requestPermission` method is used to request permission from the user to show notifications.
-1. **Register Service Worker**: The service worker will be registered in the browser to listen for push events.
+## 🛠️ Technical Implementation
 
-1. **Subscribe Notification**: The frontend will subscribe to push notifications and send the subscription object to the backend.
+### Key Components
 
-1. **Send Push Notification**: The backend will send a push notification to the frontend using the subscription object.
+1. **Permission Request** 
+   - Uses the Notifications API
+   - Handles user consent management
+   - Provides clear UI feedback
+
+2. **Service Worker** 
+   - Manages background push events
+   - Handles notification display
+   - Maintains subscription state
+
+3. **Push Subscription**
+   - Generates subscription objects
+   - Manages VAPID authentication
+   - Handles subscription updates
+
+4. **Backend Integration**
+   - Stores subscriptions securely
+   - Manages notification dispatch
+   - Handles delivery status
+
+## 📝 API Documentation
+
+### Subscribe to Notifications
+
+```typescript
+const subscription = await pushManager.subscribe({
+  userVisibleOnly: true,
+  applicationServerKey: vapidPublicKey
+});
+```
+
+### Send Notification
+
+```typescript
+webpush.sendNotification(
+  pushSubscription,
+  JSON.stringify({
+    title: "Hello!",
+    body: "This is a push notification",
+    icon: "/icon.png"
+  })
+);
+```
+
+## 🔧 Configuration Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `vapidDetails` | VAPID authentication details | Required |
+| `ttl` | Time-to-live for notifications | 24 hours |
+| `urgency` | Notification priority level | "normal" |
+
+## 📚 Learning Resources
+
+- [Push API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
+- [Web Push Protocol](https://datatracker.ietf.org/doc/html/draft-ietf-webpush-protocol)
+- [Service Worker Guide](https://developers.google.com/web/fundamentals/primers/service-workers)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+<div align="center">
+  <br />
+  <p>
+    <sub>Built with ❤️ by [Your Name]</sub>
+  </p>
+</div>
